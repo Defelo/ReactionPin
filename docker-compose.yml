@@ -1,0 +1,11 @@
+version: '3.7'
+services:
+  status_bot:
+    container_name: reactionpin
+    image: defelo/reactionpin
+    restart: always
+    tty: true
+    volumes:
+      - ./config.json:/app/config.json:ro
+    environment:
+      TOKEN: '<TOKEN>'
