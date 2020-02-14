@@ -2,12 +2,22 @@ import json
 import os
 from typing import Set
 
-from discord import Client, Message, TextChannel, RawReactionActionEvent, RawReactionClearEvent, Member, Guild
+from discord import (
+    Client,
+    Message,
+    TextChannel,
+    RawReactionActionEvent,
+    RawReactionClearEvent,
+    Member,
+    Guild,
+    MessageType,
+)
 
 config: dict = json.load(open("config.json"))
 CHANNELS: Set[int] = set(config["channels"])
 EMOJIS: Set[str] = set(chr(int(e, 16)) for e in config["emojis"])
 BLOCKED_ROLE: int = int(config["blocked_role"])
+NO_PIN_NOTIFICATION: bool = config["no_pin_notification"]
 
 
 class Bot(Client):
@@ -35,6 +45,10 @@ class Bot(Client):
         channel: TextChannel = self.get_channel(payload.channel_id)
         message: Message = await channel.fetch_message(payload.message_id)
         await message.unpin()
+
+    async def on_message(self, message: Message):
+        if NO_PIN_NOTIFICATION and message.author == self.user and message.type == MessageType.pins_add:
+            await message.delete()
 
 
 Bot().run(os.environ["TOKEN"])

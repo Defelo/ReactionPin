@@ -1,5 +1,6 @@
 {
   "channels": [],
   "emojis": ["1f4cc"],
-  "blocked_role": 677589529628114972
+  "blocked_role": 677589529628114972,
+  "no_pin_notification": true
 }
